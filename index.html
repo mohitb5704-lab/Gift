@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff6fb" />
+  <title>Happy Birthday Baby 🎂</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#fff6fb, #241722);
+      --surface: light-dark(#fffafd, #321f30);
+      --surface-2: light-dark(#fff0f7, #40243b);
+      --text: light-dark(#3a2131, #fff2fa);
+      --muted: light-dark(#805b70, #ddb8d0);
+      --accent: light-dark(#ff5fa8, #ff74b4);
+      --accent-2: light-dark(#ffb7d9, #814c70);
+      --border: light-dark(rgba(214, 77, 140, .16), rgba(255, 182, 220, .16));
+      --shadow: 0 25px 70px rgba(116, 38, 88, .16);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    #app {
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--bg);
+      border-radius: 0;
+      isolation: isolate;
+    }
+
+    .glow {
+      position: fixed;
+      width: 40vw;
+      height: 40vw;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: .23;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow.one { background: #ff9dcc; top: -12vw; left: -8vw; }
+    .glow.two { background: #f3b4ff; bottom: -15vw; right: -8vw; }
+
+    .page {
+      min-height: 100vh;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      padding: 28px 18px;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(.97) translateY(12px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .page.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    .card {
+      width: min(92vw, 700px);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(14px);
+      border-radius: 32px;
+      padding: clamp(26px, 5vw, 52px);
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 12%, rgba(255, 169, 207, .28), transparent 28%),
+                  radial-gradient(circle at 84% 88%, rgba(247, 183, 255, .18), transparent 25%);
+      pointer-events: none;
+    }
+
+    .tiny-top {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      position: relative;
+    }
+    h1, h2, p, button, input { position: relative; z-index: 1; }
+
+    .bubble-title {
+      margin: 14px 0 8px;
+      font-family: "Arial Rounded MT Bold", "Trebuchet MS", "Comic Sans MS", Arial, sans-serif;
+      font-weight: 900;
+      font-size: clamp(42px, 9vw, 82px);
+      line-height: .96;
+      color: #ff6fac;
+      letter-spacing: .01em;
+      -webkit-text-stroke: 2px #fff;
+      text-shadow:
+        0 4px 0 #ffc2df,
+        0 8px 18px rgba(240, 64, 140, .17);
+    }
+
+    .subtitle {
+      font-size: clamp(16px, 3vw, 21px);
+      line-height: 1.5;
+      color: var(--muted);
+      margin: 0 auto 24px;
+      max-width: 520px;
+    }
+
+    .pinbox {
+      display: flex;
+      justify-content: center;
+      margin: 16px auto 12px;
+    }
+    #password {
+      width: min(280px, 78vw);
+      border: 2px solid #ffb1d3;
+      background: rgba(255,255,255,.7);
+      color: #5a2f47;
+      text-align: center;
+      border-radius: 20px;
+      font-size: 28px;
+      letter-spacing: .5em;
+      padding: 16px 18px 16px 28px;
+      outline: none;
+      box-shadow: 0 12px 30px rgba(255, 98, 165, .11);
+    }
+    #password:focus { border-color: #ff5fa8; box-shadow: 0 0 0 5px rgba(255, 95, 168, .11); }
+
+    .cute-status {
+      min-height: 30px;
+      margin: 9px auto 12px;
+      font-weight: 700;
+      color: #d04c8d;
+    }
+
+    .primary-btn, .soft-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 24px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .primary-btn {
+      background: linear-gradient(135deg, #ff5fa8, #ff8dc2);
+      color: white;
+      box-shadow: 0 14px 26px rgba(241, 75, 145, .24);
+    }
+    .soft-btn {
+      background: linear-gradient(135deg, #ffe4f1, #f7dff8);
+      color: #8d315e;
+      box-shadow: 0 10px 24px rgba(160, 95, 145, .12);
+    }
+    .primary-btn:hover, .soft-btn:hover { transform: translateY(-2px) scale(1.02); }
+    .primary-btn:active, .soft-btn:active { transform: translateY(1px) scale(.99); }
+
+    .emoji-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      font-size: clamp(28px, 6vw, 44px);
+      margin: 18px 0 8px;
+    }
+
+    .success-burst {
+      display: none;
+      margin: 0 auto 10px;
+      font-size: 36px;
+      animation: pop .7s ease both;
+    }
+    .success-burst.show { display: block; }
+
+    .hero-heart {
+      font-size: clamp(70px, 15vw, 120px);
+      animation: floaty 2.4s ease-in-out infinite;
+      filter: drop-shadow(0 12px 16px rgba(220, 59, 132, .14));
+      margin-bottom: 2px;
+    }
+
+    .reminder {
+      font-family: "Arial Rounded MT Bold", "Trebuchet MS", Arial, sans-serif;
+      font-size: clamp(42px, 9vw, 74px);
+      line-height: 1.03;
+      margin: 16px 0;
+      color: #ff64a8;
+      letter-spacing: .01em;
+      text-shadow: 0 4px 0 #ffc6df;
+    }
+    .reminder-small {
+      font-size: clamp(16px, 3vw, 20px);
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 530px;
+      margin: 0 auto 28px;
+    }
+
+    .final-text {
+      font-family: "Arial Rounded MT Bold", "Trebuchet MS", Arial, sans-serif;
+      font-size: clamp(33px, 7vw, 64px);
+      line-height: 1.08;
+      margin: 12px auto 22px;
+      color: #ff5fa8;
+      text-shadow: 0 4px 0 #ffc4df;
+      max-width: 640px;
+    }
+    .final-sub {
+      font-size: clamp(17px, 3vw, 22px);
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 570px;
+      margin: 0 auto 24px;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: .8;
+    }
+
+    #fx {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .float-emoji {
+      position: fixed;
+      pointer-events: none;
+      z-index: 3;
+      font-size: 28px;
+      animation: drift 4.5s linear forwards;
+      opacity: .95;
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    @keyframes pop {
+      0% { transform: scale(.3); opacity: 0; }
+      70% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      15% { opacity: .95; }
+      100% { transform: translateY(-115vh) rotate(380deg); opacity: 0; }
+    }
+
+    @media (max-width: 500px) {
+      .card { border-radius: 26px; }
+      #password { font-size: 25px; }
+      .footer-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+    <canvas id="fx"></canvas>
+
+    <section id="page1" class="page active">
+      <div class="card">
+        <div class="tiny-top">Unlock the surprise</div>
+        <div class="emoji-row">🧸 🎀 🧁 🎂 💖</div>
+        <h1 class="bubble-title" aria-hidden="true" style="display:none;">Happy Birthday Baby</h1>
+        <p class="subtitle">Only a secret number can unlock your little surprise ✨</p>
+        <div class="pinbox">
+          <input id="password" inputmode="numeric" autocomplete="off" maxlength="4" type="password" placeholder="••••" aria-label="Birthday password" />
+        </div>
+        <div id="status" class="cute-status">Hint: it’s a 4-digit secret 🎀</div>
+        <button id="unlock" class="primary-btn">Unlock the surprise 💗</button>
+        <div class="footer-note">Made with lots of love, sparkles &amp; cake 🎂</div>
+      </div>
+    </section>
+
+    <section id="page2" class="page">
+      <div class="card">
+        <div id="successBurst" class="success-burst">🧸 + 🎂 + 🥳 + 💖</div>
+        <div class="hero-heart">🎉</div>
+        <h2 class="bubble-title" style="font-size:clamp(38px,8vw,72px);">Happy Birthday Baby</h2>
+        <p class="subtitle">Today is all about you. Smile big, eat cake, enjoy every little moment, and keep shining. 💕✨</p>
+        <div class="emoji-row">🎂 🥳 🎈 💐 🧸</div>
+        <button id="toReminder" class="soft-btn">Thank you 💗</button>
+      </div>
+    </section>
+
+    <section id="page3" class="page">
+      <div class="card">
+        <div class="emoji-row">📸 🧸 👉 👀</div>
+        <div class="tiny-top">IMPORTANT REMINDER 🚨</div>
+        <h2 class="reminder">REMINDER:<br>Kal tumhe mujhe apni images send karni hai 😌</h2>
+        <p class="reminder-small">Aur agar nahi ki na to dekhna tum... 😤😂</p>
+        <div class="emoji-row">📷 💌 😈 🎀</div>
+        <button id="toFinal" class="primary-btn">Next ➜</button>
+      </div>
+    </section>
+
+    <section id="page4" class="page">
+      <div class="card">
+        <div class="hero-heart">🥳</div>
+        <h2 class="final-text">Enjoy ur day 💗</h2>
+        <p class="final-sub">And thank you for coming into my life. 🥹❤️<br>May your day be full of happiness, laughter, cake, and beautiful memories. 🎂✨</p>
+        <div class="emoji-row">💖 🎂 🌸 🫶 🎈</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const SECRET = '1437'; // Change this 4-digit password here if you want a different one.
+      const pages = [1, 2, 3, 4].map(n => document.getElementById('page' + n));
+      const password = document.getElementById('password');
+      const status = document.getElementById('status');
+      const unlock = document.getElementById('unlock');
+      const successBurst = document.getElementById('successBurst');
+      const canvas = document.getElementById('fx');
+      const ctx = canvas.getContext('2d');
+      let currentPage = 1;
+      let particles = [];
+      let lastFirework = 0;
+      let lastFloat = 0;
+      let running = true;
+
+      function resizeCanvas() {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(innerWidth * ratio);
+        canvas.height = Math.floor(innerHeight * ratio);
+        canvas.style.width = innerWidth + 'px';
+        canvas.style.height = innerHeight + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      resizeCanvas();
+
+      function setPage(n) {
+        currentPage = n;
+        pages.forEach((p, i) => p.classList.toggle('active', i === n - 1));
+        if (n === 2) {
+          successBurst.classList.remove('show');
+          requestAnimationFrame(() => successBurst.classList.add('show'));
+        }
+        for (let i = 0; i < 3; i++) launchFirework(innerWidth * (.25 + Math.random() * .5), innerHeight * (.18 + Math.random() * .4));
+      }
+
+      function unlockPage() {
+        const value = password.value.replace(/\D/g, '');
+        password.value = value;
+        if (value === SECRET) {
+          status.textContent = 'Awww! Teddy, cake aur sparkles tumhare liye ready hain! 🧸🎂✨';
+          status.style.color = '#c83c82';
+          unlock.textContent = 'Unlocked! 💖';
+          unlock.disabled = true;
+          setTimeout(() => setPage(2), 550);
+        } else {
+          const messages = [
+            'Oopsie 😭 password galat hai… ek aur cute try karo!',
+            'Teddy says: almost! 🧸💗',
+            'Cake is waiting… 🎂😌 try again!',
+            'Nope nope 😤🎀 that’s not the secret number!'
+          ];
+          status.textContent = messages[Math.floor(Math.random() * messages.length)];
+          password.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-8px)' },
+            { transform: 'translateX(8px)' },
+            { transform: 'translateX(0)' }
+          ], { duration: 260, easing: 'ease-out' });
+        }
+      }
+
+      unlock.addEventListener('click', unlockPage);
+      password.addEventListener('input', function () {
+        status.textContent = this.value.length === 4 ? 'Okayyyy… checking the secret… 👀💗' : 'Hint: it’s a 4-digit secret 🎀';
+      });
+      password.addEventListener('keydown', e => {
+        if (e.key === 'Enter') unlockPage();
+      });
+      document.getElementById('toReminder').addEventListener('click', () => setPage(3));
+      document.getElementById('toFinal').addEventListener('click', () => setPage(4));
+
+      const sparkColors = ['#ff4fa0', '#ff83bd', '#ffd06e', '#a77bff', '#6ed8ff', '#8ef0b7'];
+
+      function launchFirework(x, y) {
+        const count = 48 + Math.floor(Math.random() * 28);
+        const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count + (Math.random() - .5) * .18;
+          const speed = 2 + Math.random() * 4.4;
+          particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 55 + Math.random() * 28,
+            size: 1.4 + Math.random() * 2.8,
+            color,
+            gravity: .055 + Math.random() * .04
+          });
+        }
+      }
+
+      function draw(now) {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+        if (now - lastFirework > 460) {
+          lastFirework = now;
+          launchFirework(
+            innerWidth * (.08 + Math.random() * .84),
+            innerHeight * (.10 + Math.random() * .55)
+          );
+        }
+
+        particles = particles.filter(p => p.life > 0);
+        for (const p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.vx *= .992;
+          p.vy *= .992;
+          p.life -= 1;
+          ctx.globalAlpha = Math.max(0, p.life / 82);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        if (now - lastFloat > 900) {
+          lastFloat = now;
+          createFloatEmoji();
+        }
+        if (running) requestAnimationFrame(draw);
+      }
+
+      function createFloatEmoji() {
+        const pool = currentPage === 3 ? ['📸', '🧸', '🎀', '😂', '💌', '😈'] : ['💖', '🎀', '🎈', '🧸', '✨', '🎂', '🥳', '🌸'];
+        const el = document.createElement('div');
+        el.className = 'float-emoji';
+        el.textContent = pool[Math.floor(Math.random() * pool.length)];
+        el.style.left = Math.random() * 96 + 'vw';
+        el.style.top = (92 + Math.random() * 8) + 'vh';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4700);
+      }
+
+      // Starts immediately on page load; no clicks required.
+      requestAnimationFrame(draw);
+
+      document.addEventListener('visibilitychange', () => {
+        running = !document.hidden;
+        if (running) {
+          lastFirework = performance.now();
+          requestAnimationFrame(draw);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
